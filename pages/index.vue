@@ -20,7 +20,17 @@
               style="left: 260px; top: 120px"
             ></div>
             <div class="line1" id="line"></div>
-            
+            <!--  -->
+
+            <!--  -->
+            <div class="point2" id="pointA" style="left: 40px; top: 40px"></div>
+            <div
+              class="point2"
+              id="pointB"
+              style="left: 260px; top: 120px"
+            ></div>
+            <div class="line2" id="line"></div>
+            <!--  -->
           </div>
           <v-btn elevation="2" id="add-line">ADD Line</v-btn>
           <div>現在時間為:<span id="todate"></span></div>
@@ -74,9 +84,10 @@ export default {
       name: "main", // select "main" socket from nuxt.config.js - we could also skip this because "main" is the default socket
     });
     var img = document.getElementById("image");
+    var divimg = document.getElementById("cover");
     vm.socket.on("data", (data) => {
       img.src = "data:image/jpeg;base64," + data;
-      img.style.transform = "rotate(180deg)";
+      img.style.transform = "rotate(360deg)";
     });
     this.jqueryData();
     this.dateBar();
@@ -100,7 +111,7 @@ export default {
               // startResizing(ui.position.left, ui.position.right);
             },
             containment: "parent",
-            handles:"all"
+            handles: "all",
           })
           .draggable({
             stop: function (event, ui) {
@@ -108,24 +119,35 @@ export default {
             },
             containment: "parent",
           });
-          $(".crosshair").draggable({
-            containment: "parent",
-          })
+        $(".crosshair").draggable({
+          containment: "parent",
+        });
         // $("#test_cover").draggable();
-        $(".point1").draggable({
+        for (var i = 1; i <= 2; i++) {
+        var pointname = ".point" + i;
+        $(pointname).draggable({
           drag: function (e, ui) {
             wrapper();
           },
           containment: "parent",
         });
+        }
         wrapper();
         function wrapper() {
-            var pointname = "point" + "1";
-            var linename = "line" + "1";
+          for (var i = 1; i <= 2; i++) {
+            var pointname = "point" + i;
+            var linename = "line" + i;
             const point1 = document.getElementsByClassName(pointname)[0];
             const point2 = document.getElementsByClassName(pointname)[1];
             const line = document.getElementsByClassName(linename)[0];
-            getCoordinate(point1, point2, line);
+            var getline = getCoordinate(point1, point2, line);
+            line.style.width = getline.width + "px";
+            line.style.left = getline.left + "px";
+            line.style.top = getline.top + "px";
+
+            // 旋轉線以匹配點之間的角度
+            line.style.transform = "rotate(" + getline.angleDeg + "deg)";
+          }
         }
         function getCoordinate(point1, point2, line) {
           // 紀錄AB兩點TOP以及LEFT位置
@@ -144,14 +166,20 @@ export default {
           var pointWidth = point1.clientWidth / 2;
           var pointHeight = point1.clientWidth / 2;
 
+          var array = [];
+          array["width"] = length;
+          array["left"] = p1.x + pointWidth;
+          array["top"] = p1.y + pointHeight;
+          array["angleDeg"] = angleDeg;
+          return array;
           // 設置線距和位置
           // 從上方添加寬度/高度，使線條從中間而不是左上角開始
-          line.style.width = length + "px";
-          line.style.left = p1.x + pointWidth + "px";
-          line.style.top = p1.y + pointHeight + "px";
+          // line.style.width = length + "px";
+          // line.style.left = p1.x + pointWidth + "px";
+          // line.style.top = p1.y + pointHeight + "px";
 
           // 旋轉線以匹配點之間的角度
-          line.style.transform = "rotate(" + angleDeg + "deg)";
+          // line.style.transform = "rotate(" + angleDeg + "deg)";
         }
       });
     },
@@ -198,7 +226,7 @@ export default {
   width: 150px;
   height: 150px;
   padding: 0.5em;
-  border: 1px solid rgb(201, 201, 201);
+  border: 10px solid rgb(17, 17, 17);
   position: absolute;
   top: 0;
   left: 0;
@@ -220,6 +248,7 @@ export default {
   height: 20px;
   position: absolute;
   background-color: #555;
+  border: 0.5px solid rgb(0, 0, 0);
   cursor: pointer;
   border-radius: 20px;
 }
@@ -228,13 +257,14 @@ export default {
   height: 20px;
   position: absolute;
   background-color: #555;
+  border: 0.5px solid rgb(0, 0, 0);
   cursor: pointer;
   border-radius: 20px;
 }
 #line {
   position: absolute;
-  height: 2px;
-  background-color: #2fd42f;
+  height: 4px;
+  background-color: #ff0000;
   transform-origin: left;
   pointer-events: none;
 }
