@@ -33,7 +33,7 @@
 export default {
   name: "IndexPage",
   head: {
-    title: "即時監控",
+    title: "即時監控1",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
