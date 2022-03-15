@@ -88,20 +88,19 @@ export default {
     dateBar() {
       mToday();
       function mToday() {
-        var Today = new Date();
+        var m = new Date();
         document.getElementById("todate").innerHTML =
-          Today.getFullYear() +
-          "年" +
-          Today.getMonth() +
-          "月" +
-          Today.getDate() +
-          "日" +
+          m.getUTCFullYear() +
+          "/" +
+          ("0" + (m.getUTCMonth() + 1)).slice(-2) +
+          "/" +
+          ("0" + m.getUTCDate()).slice(-2) +
           " " +
-          Today.getHours() +
+          ("0" + m.getUTCHours()).slice(-2) +
           ":" +
-          Today.getMinutes() +
+          ("0" + m.getUTCMinutes()).slice(-2) +
           ":" +
-          Today.getSeconds();
+          ("0" + m.getUTCSeconds()).slice(-2);
       }
       setInterval(
         function () {

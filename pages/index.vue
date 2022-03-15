@@ -13,26 +13,21 @@
             </div>
             <div id="test_cover"></div>
             <!--  -->
-            <div class="point1" id="pointA" style="left: 40px; top: 40px"></div>
+            <!-- <div
+              class="point1 point-totle"
+              id="pointA"
+              style="left: 40px; top: 40px"
+            ></div>
             <div
               class="point1"
               id="pointB"
               style="left: 260px; top: 120px"
             ></div>
-            <div class="line1" id="line"></div>
-            <!--  -->
-
-            <!--  -->
-            <div class="point2" id="pointA" style="left: 40px; top: 40px"></div>
-            <div
-              class="point2"
-              id="pointB"
-              style="left: 260px; top: 120px"
-            ></div>
-            <div class="line2" id="line"></div>
+            <div class="line1" id="line"></div> -->
             <!--  -->
           </div>
           <v-btn elevation="2" id="add-line">ADD Line</v-btn>
+          <v-btn elevation="2" id="add-scope">ADD Scope</v-btn>
           <div>現在時間為:<span id="todate"></span></div>
         </v-responsive>
       </v-card>
@@ -70,6 +65,10 @@ export default {
         src: "/js/jquery-collision.js",
         type: "text/javascript",
       },
+      {
+        src: "/js/object.js",
+        type: "text/javascript",
+      },
     ],
   },
   data() {
@@ -83,123 +82,31 @@ export default {
     vm.socket = this.$nuxtSocket({
       name: "main", // select "main" socket from nuxt.config.js - we could also skip this because "main" is the default socket
     });
-    var img = document.getElementById("image");
-    var divimg = document.getElementById("cover");
+    const img = document.getElementById("image");
+    const divimg = document.getElementById("cover");
     vm.socket.on("data", (data) => {
       img.src = "data:image/jpeg;base64," + data;
       img.style.transform = "rotate(360deg)";
     });
-    this.jqueryData();
     this.dateBar();
   },
   methods: {
-    jqueryData() {
-      $(document).ready(function () {
-        // alert("123");
-        //ADD LINE
-        document.getElementById("add-line").onclick = function () {
-          console.log("123");
-          $("#cover").append(
-            '<div class="point1" id="pointA" style="left: 40px; top: 40px"></div><div class="point1"id="pointB"style="left: 260px; top: 120px"></div><div class="line1" id="line"></div>'
-          );
-        };
-        //ADD LINE END
-        $("#test_cover")
-          .resizable({
-            stop: function (e, ui) {
-              console.log(this);
-              // startResizing(ui.position.left, ui.position.right);
-            },
-            containment: "parent",
-            handles: "all",
-          })
-          .draggable({
-            stop: function (event, ui) {
-              console.log(this);
-            },
-            containment: "parent",
-          });
-        $(".crosshair").draggable({
-          containment: "parent",
-        });
-        // $("#test_cover").draggable();
-        for (var i = 1; i <= 2; i++) {
-        var pointname = ".point" + i;
-        $(pointname).draggable({
-          drag: function (e, ui) {
-            wrapper();
-          },
-          containment: "parent",
-        });
-        }
-        wrapper();
-        function wrapper() {
-          for (var i = 1; i <= 2; i++) {
-            var pointname = "point" + i;
-            var linename = "line" + i;
-            const point1 = document.getElementsByClassName(pointname)[0];
-            const point2 = document.getElementsByClassName(pointname)[1];
-            const line = document.getElementsByClassName(linename)[0];
-            var getline = getCoordinate(point1, point2, line);
-            line.style.width = getline.width + "px";
-            line.style.left = getline.left + "px";
-            line.style.top = getline.top + "px";
-
-            // 旋轉線以匹配點之間的角度
-            line.style.transform = "rotate(" + getline.angleDeg + "deg)";
-          }
-        }
-        function getCoordinate(point1, point2, line) {
-          // 紀錄AB兩點TOP以及LEFT位置
-          var p1 = { x: point1.offsetLeft, y: point1.offsetTop };
-          var p2 = { x: point2.offsetLeft, y: point2.offsetTop };
-
-          // 兩點之間距離
-          var a = p1.x - p2.x;
-          var b = p1.y - p2.y;
-          var length = Math.sqrt(a * a + b * b);
-
-          // 計算兩點之間距離的角度
-          var angleDeg = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
-
-          // 計算元素中心位置
-          var pointWidth = point1.clientWidth / 2;
-          var pointHeight = point1.clientWidth / 2;
-
-          var array = [];
-          array["width"] = length;
-          array["left"] = p1.x + pointWidth;
-          array["top"] = p1.y + pointHeight;
-          array["angleDeg"] = angleDeg;
-          return array;
-          // 設置線距和位置
-          // 從上方添加寬度/高度，使線條從中間而不是左上角開始
-          // line.style.width = length + "px";
-          // line.style.left = p1.x + pointWidth + "px";
-          // line.style.top = p1.y + pointHeight + "px";
-
-          // 旋轉線以匹配點之間的角度
-          // line.style.transform = "rotate(" + angleDeg + "deg)";
-        }
-      });
-    },
     dateBar() {
       mToday();
       function mToday() {
-        var Today = new Date();
+        var m = new Date();
         document.getElementById("todate").innerHTML =
-          Today.getFullYear() +
-          "年" +
-          Today.getMonth() +
-          "月" +
-          Today.getDate() +
-          "日" +
+          m.getUTCFullYear() +
+          "/" +
+          ("0" + (m.getUTCMonth() + 1)).slice(-2) +
+          "/" +
+          ("0" + m.getUTCDate()).slice(-2) +
           " " +
-          Today.getHours() +
+          ("0" + m.getUTCHours()).slice(-2) +
           ":" +
-          Today.getMinutes() +
+          ("0" + m.getUTCMinutes()).slice(-2) +
           ":" +
-          Today.getSeconds();
+          ("0" + m.getUTCSeconds()).slice(-2);
       }
       setInterval(
         function () {
@@ -251,6 +158,7 @@ export default {
   border: 0.5px solid rgb(0, 0, 0);
   cursor: pointer;
   border-radius: 20px;
+  z-index: 1;
 }
 #pointB {
   width: 20px;
@@ -260,11 +168,13 @@ export default {
   border: 0.5px solid rgb(0, 0, 0);
   cursor: pointer;
   border-radius: 20px;
+  z-index: 1;
 }
 #line {
   position: absolute;
   height: 4px;
   background-color: #ff0000;
+  border: 0.1px solid rgb(0, 0, 0);
   transform-origin: left;
   pointer-events: none;
 }
