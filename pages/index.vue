@@ -11,7 +11,7 @@
             <div class="crosshair">
               <img src="/images/spot(png).png" />
             </div>
-            <div id="test_cover"></div>
+            <div id="test_cover" title="test"></div>
             <!--  -->
             <!-- <div
               class="point1 point-totle"
@@ -28,13 +28,17 @@
           </div>
           <v-btn elevation="2" id="add-line">ADD Line</v-btn>
           <v-btn elevation="2" id="add-scope">ADD Scope</v-btn>
+          <v-btn elevation="2" id="add-spot">ADD SPOT</v-btn>
           <div>現在時間為:<span id="todate"></span></div>
+          <div id="my-charts" style="width: 100%; height: 500px">1</div>
+          <!-- <div class="tooltip_content">this a tooltip</div> -->
         </v-responsive>
       </v-card>
     </div>
   </v-app>
 </template>
 <script>
+import * as echarts from "echarts";
 export default {
   name: "IndexPage",
   head: {
@@ -88,9 +92,36 @@ export default {
       img.src = "data:image/jpeg;base64," + data;
       img.style.transform = "rotate(360deg)";
     });
+    // this.myChart();
     this.dateBar();
   },
   methods: {
+    myChart() {
+      
+      var chartDom = document.getElementById("my-charts");
+      var myChart = echarts.init(chartDom);
+      var option;
+      // console.log(this.items);
+      option = {
+        xAxis: {
+          type: "category",
+          data: ["one", "two", "three"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            data: [12, 20, 11],
+            type: "line",
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+
+      jQuery("#my-charts").appendTo(".tooltip_content");
+    },
     dateBar() {
       mToday();
       function mToday() {
@@ -186,5 +217,12 @@ export default {
 }
 .crosshair > img {
   max-width: 100%;
+}
+
+.tooltip_content {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  background-color: rgb(224, 231, 120);
 }
 </style>

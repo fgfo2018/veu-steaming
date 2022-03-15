@@ -1,4 +1,18 @@
 $(document).ready(function () {
+  //tooltip
+  var tooltip_content =
+    '<div class="tooltip_content" >TEST TOOLTIP</div>';
+  // var tooltip_content = $('.tooltip_content').html();
+  jQuery("#test_cover").tooltip({
+    track: true,
+    content: tooltip_content,
+  });
+  //tooltip end
+
+  // ADD SCOPE
+
+  // ADD SCOPE END
+
   //ADD LINE
   $("#add-line").click(function () {
     if ($(".point-totle")) {
