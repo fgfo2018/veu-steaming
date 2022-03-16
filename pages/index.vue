@@ -3,35 +3,42 @@
     <div>
       <v-card>
         <v-responsive :aspect-ratio="16 / 9">
-          <div class="cover" id="cover">
-            <img
-              id="image"
-              src="https://dummyimage.com/640x480/969696/000000&text=loading...."
-            />
-            <div class="crosshair">
-              <img src="/images/spot(png).png" />
-            </div>
-            <div id="test_cover" title="test"></div>
-            <!--  -->
-            <!-- <div
-              class="point1 point-totle"
-              id="pointA"
-              style="left: 40px; top: 40px"
-            ></div>
-            <div
-              class="point1"
-              id="pointB"
-              style="left: 260px; top: 120px"
-            ></div>
-            <div class="line1" id="line"></div> -->
-            <!--  -->
-          </div>
-          <v-btn elevation="2" id="add-line">ADD Line</v-btn>
-          <v-btn elevation="2" id="add-scope">ADD Scope</v-btn>
-          <v-btn elevation="2" id="add-spot">ADD SPOT</v-btn>
-          <div>現在時間為:<span id="todate"></span></div>
-          <div id="my-charts" style="width: 100%; height: 500px">1</div>
-          <!-- <div class="tooltip_content">this a tooltip</div> -->
+          <v-container class="lighten-5">
+            <v-row no-gutters>
+              <v-col cols="12" md="8">
+                <div class="cover" id="cover">
+                  <img
+                    id="image"
+                    src="https://dummyimage.com/640x480/969696/000000&text=loading...."
+                  />
+                </div>
+                <br />
+                <v-btn elevation="2" id="add-line">ADD Line</v-btn>
+                <v-btn elevation="2" id="add-scope">ADD Scope</v-btn>
+                <v-btn elevation="2" id="add-spot">ADD SPOT</v-btn>
+                <div>現在時間為:<span id="todate"></span></div>
+                <div id="my-charts" style="width: 100%; height: 500px"></div>
+                <!-- <div class="tooltip_content">this a tooltip</div> -->
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-list dense>
+                  <v-subheader>REPORTS</v-subheader>
+                  <v-list-item-group v-model="selectedItem" color="primary">
+                    <v-list-item v-for="(item, i) in items" :key="i">
+                      <v-list-item-icon>
+                        <v-icon v-text="item.icon"></v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-text="item.text"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-responsive>
       </v-card>
     </div>
@@ -78,6 +85,12 @@ export default {
   data() {
     return {
       latestTickId: 0,
+      selectedItem: 1,
+      items: [
+        { text: 'Real-Time', icon: 'mdi-clock' },
+        { text: 'Audience', icon: 'mdi-signal-5g' },
+        { text: 'Conversions', icon: 'mdi-flag' },
+      ],
     };
   },
   mounted() {
@@ -97,7 +110,6 @@ export default {
   },
   methods: {
     myChart() {
-      
       var chartDom = document.getElementById("my-charts");
       var myChart = echarts.init(chartDom);
       var option;
@@ -160,14 +172,27 @@ export default {
   width: auto;
   display: inline-block;
 }
-#test_cover {
+.scope {
   width: 150px;
   height: 150px;
-  padding: 0.5em;
-  border: 10px solid rgb(17, 17, 17);
+  /* padding: 0.5em; */
+  border: 2px solid rgb(17, 17, 17);
   position: absolute;
-  top: 0;
-  left: 0;
+  /* top: 0; */
+  /* left: 0; */
+  cursor: grab;
+}
+.scope > span {
+  position: absolute;
+  left: 100%;
+  color: #000;
+  background-color: #fff;
+  /* border: 1px solid; */
+  bottom: 100%;
+  border-radius: 4px;
+  padding: 0px 4px;
+  box-shadow: 1px 1px 5px #4c4c4c;
+  pointer-events: none;
 }
 #image {
   /* transform:rotate(180deg); */
@@ -182,41 +207,67 @@ export default {
   background-color: #eee;
 }
 #pointA {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   position: absolute;
-  background-color: #555;
-  border: 0.5px solid rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  /* border: 0.5px solid rgb(0, 0, 0); */
+  box-shadow: 1px 1px 5px #4c4c4c;
   cursor: pointer;
   border-radius: 20px;
   z-index: 1;
 }
 #pointB {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   position: absolute;
-  background-color: #555;
-  border: 0.5px solid rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  /* border: 0.5px solid rgb(0, 0, 0); */
+  box-shadow: 1px 1px 5px #4c4c4c;
   cursor: pointer;
   border-radius: 20px;
   z-index: 1;
 }
+#pointB > span {
+  position: absolute;
+  bottom: 100%;
+  left: 100%;
+  color: #000;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 0px 4px;
+  box-shadow: 1px 1px 5px #4c4c4c;
+  pointer-events: none;
+}
 #line {
   position: absolute;
   height: 4px;
-  background-color: #ff0000;
-  border: 0.1px solid rgb(0, 0, 0);
+  background-color: #000000;
+  /* border: 0.1px solid rgb(0, 0, 0); */
+  box-shadow: 1px 1px 5px #4c4c4c;
   transform-origin: left;
   pointer-events: none;
 }
-.crosshair {
-  top: 295px;
-  left: 225px;
+.spot {
+  /* top: 295px; */
+  /* left: 225px; */
   position: absolute;
-  cursor: pointer;
+  cursor: grab;
+  width: 50px;
 }
-.crosshair > img {
+.spot > img {
   max-width: 100%;
+}
+.spot > span {
+  position: absolute;
+  bottom: 70%;
+  left: 70%;
+  color: #000;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 0px 4px;
+  box-shadow: 1px 1px 5px #4c4c4c;
+  pointer-events: none;
 }
 
 .tooltip_content {

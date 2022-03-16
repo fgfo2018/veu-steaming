@@ -1,15 +1,70 @@
 $(document).ready(function () {
-  //tooltip
-  var tooltip_content =
-    '<div class="tooltip_content" >TEST TOOLTIP</div>';
-  // var tooltip_content = $('.tooltip_content').html();
-  jQuery("#test_cover").tooltip({
-    track: true,
-    content: tooltip_content,
-  });
-  //tooltip end
+  //ADD SPOT
+
+  $("#add-spot").click(function () {
+    if ($(".spot")) {
+      var totle = $(".spot").length;
+    } else {
+      var totle = 0;
+    }
+    var spotsum = totle + 1;
+    var locationA = 40 + totle * 20;
+    var $element = '<div id="spot' + spotsum + '" class="spot" style="top: ' + locationA + 'px; left: ' + locationA + 'px"><img src="/images/spot(png).png" /><span>' + spotsum + '</span></div>';
+    $("#cover").append($element);
+    var spottotlesum = 1;
+    $(".spot").each(function () {
+      var spotname = "#spot" + spottotlesum;
+      $(spotname).draggable({
+        containment: "parent",
+        tolerance: 'pointer'
+      });
+      spottotlesum = spottotlesum + 1;
+    })
+
+  })
+
+  //ADD SPOT end
 
   // ADD SCOPE
+  $("#add-scope").click(function () {
+    if ($(".scope")) {
+      var totle = $(".scope").length;
+    } else {
+      var totle = 0;
+    }
+    var scopesum = totle + 1;
+    var locationA = 40 + totle * 20;
+    var tooltip_content =
+      '<div class="tooltip_content" >TEST TOOLTIP</div>';
+    var $element = '<div id="scope' + scopesum + '" class="scope" style="top:' + locationA + 'px;left:' + locationA + 'px;" title="Tooltip"><span>' + scopesum + '</span></div>';
+    $("#cover").append($element);
+
+    var scopetotlesum = 1;
+    $(".scope").each(function () {
+      var scopename = "#scope" + scopetotlesum;
+      $(scopename)
+        .resizable({
+          stop: function (e, ui) {
+            // console.log(this);
+            // startResizing(ui.position.left, ui.position.right);
+          },
+          containment: "parent",
+          handles: "all",
+        })
+        .draggable({
+          stop: function (event, ui) {
+            // console.log(this);
+          },
+          containment: "parent",
+        })
+        .tooltip({
+          track: true,
+          content: tooltip_content,
+        });
+      scopetotlesum = scopetotlesum + 1;
+    })
+  });
+
 
   // ADD SCOPE END
 
@@ -39,7 +94,7 @@ $(document).ready(function () {
       locationB +
       "px; top: " +
       locationB2 +
-      'px"></div><div class="' +
+      'px"><span>' + pointsum + '</span></div><div class="' +
       linename +
       '" id="line"></div>';
     //append it to the DOM
@@ -61,24 +116,7 @@ $(document).ready(function () {
     });
   });
   //ADD LINE END
-  $("#test_cover")
-    .resizable({
-      stop: function (e, ui) {
-        // console.log(this);
-        // startResizing(ui.position.left, ui.position.right);
-      },
-      containment: "parent",
-      handles: "all",
-    })
-    .draggable({
-      stop: function (event, ui) {
-        // console.log(this);
-      },
-      containment: "parent",
-    });
-  $(".crosshair").draggable({
-    containment: "parent",
-  });
+
 
   function wrapper(pointname, linename) {
     const point1 = document.getElementsByClassName(pointname)[0];
